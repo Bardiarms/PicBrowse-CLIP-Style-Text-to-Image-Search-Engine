@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 from PIL import Image
 import os
-import errno
+
 
 
 class PicBrowseDataset(Dataset):
