@@ -42,7 +42,7 @@ class PicBrowseModel(nn.Module):
         # Similarity matrix computation
         similarity_matrix = image_embeddings @ text_embeddings.T
         
-        # Scale logits
+        # Applying Logit Scale to sharpen similarity scores
         logits = self.logit_scale.exp() * similarity_matrix
 
         
