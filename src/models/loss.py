@@ -13,7 +13,7 @@ class ContrastiveLoss:
             logits_per_text: similarity scores between texts and all images
         
         Returns:
-            loss: A scalar contrastive loss value
+            total_loss: A scalar contrastive loss value
         """
         # Compute image-to-text loss
         labels = torch.arange(logits_per_image.size(0)).to(logits_per_image.device)
