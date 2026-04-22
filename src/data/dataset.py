@@ -3,12 +3,16 @@ from pathlib import Path
 import pandas as pd
 from PIL import Image
 import os
+from torchvision import transforms
 
 
 
 class PicBrowseDataset(Dataset):
     
-    def __init__(self, csv_file, image_folder, transform):
+    def __init__(self, csv_file: str,
+                 image_folder:str,
+                 transform: transforms.transforms
+        ):
         self.csv_file = Path(csv_file)
         self.image_folder = Path(image_folder)
         self.transform = transform
