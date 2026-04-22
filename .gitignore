@@ -2,3 +2,4 @@ env
 data
 scripts
 src/models/__pycache__
+src/training/__pycache__

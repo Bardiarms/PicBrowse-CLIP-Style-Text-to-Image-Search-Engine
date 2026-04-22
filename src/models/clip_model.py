@@ -1,5 +1,5 @@
-from image_encoder import FrozenImageEncoder
-from text_encoder import TextEncoder
+from src.models.image_encoder import FrozenImageEncoder
+from src.models.text_encoder import TextEncoder
 from torch import nn
 import torch.nn.functional as F
 import torch
