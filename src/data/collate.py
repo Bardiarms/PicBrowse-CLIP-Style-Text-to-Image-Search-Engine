@@ -1,5 +1,5 @@
 import torch
-from models.tokenizer import WordTokenizer
+from src.models.tokenizer import WordTokenizer
 from typing import Dict, Any
 
 

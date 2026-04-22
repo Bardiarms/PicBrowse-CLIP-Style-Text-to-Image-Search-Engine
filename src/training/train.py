@@ -1,7 +1,7 @@
 from torch.utils.data import DataLoader
 import torch
-from models.clip_model import PicBrowseModel
-from models.loss import ContrastiveLoss
+from src.models.clip_model import PicBrowseModel
+from src.models.loss import ContrastiveLoss
 from torch.optim import AdamW
 from typing import List
 

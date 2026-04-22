@@ -1,3 +1,4 @@
 env
 data
-scripts/smoke_test.py
+scripts
+src/models/__pycache__
