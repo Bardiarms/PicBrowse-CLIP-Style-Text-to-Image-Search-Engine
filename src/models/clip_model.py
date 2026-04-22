@@ -3,6 +3,7 @@ from text_encoder import TextEncoder
 from torch import nn
 import torch.nn.functional as F
 import torch
+from typing import Dict
 
 
 
@@ -34,7 +35,7 @@ class PicBrowseModel(nn.Module):
         return text_embeddings
     
     
-    def forward(self, images, input_ids, attention_mask):
+    def forward(self, images, input_ids, attention_mask)-> Dict[str, torch.Tensor]:
         
         image_embeddings = self.encode_image(images)
         text_embeddings = self.encode_text(input_ids, attention_mask)
