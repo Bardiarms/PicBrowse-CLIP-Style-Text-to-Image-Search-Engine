@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from torchvision import models
+from torchvision.models import resnet18, ResNet18_Weights
 
 
 class FrozenImageEncoder(nn.Module):
@@ -11,7 +11,7 @@ class FrozenImageEncoder(nn.Module):
     
     def __init__(self):
         super().__init__()
-        model = models.resnet18(pretrained=True)
+        model = resnet18(weights=ResNet18_Weights.DEFAULT)
         
         # Remove final classification layer
         self.features = nn.Sequential(*list(model.children())[:-1])  # up to avgpool
