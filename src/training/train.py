@@ -86,6 +86,14 @@ def save_best_checkpoint(clip_model: PicBrowseModel,
             "loss": loss,
             "model_state_dict": clip_model.state_dict(),
             "optimizer_state_dict": optimizer.state_dict(),
+            "model_config": {
+                "max_length": 32,
+                "embed_dim": 256,
+                "num_heads": 4,
+                "num_layers": 2,
+                "ff_dim": 512,
+                "output_dim": 512,
+            }
         }
         
         torch.save(checkpoint_dict, save_path)
