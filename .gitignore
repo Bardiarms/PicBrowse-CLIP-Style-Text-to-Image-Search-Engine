@@ -3,3 +3,4 @@ data
 scripts
 src/models/__pycache__
 src/training/__pycache__
+.DS_Store
