@@ -35,9 +35,15 @@ class PicBrowseModel(nn.Module):
         return text_embeddings
     
     
-    def forward(self, images, input_ids, attention_mask)-> Dict[str, torch.Tensor]:
-        
-        image_embeddings = self.encode_image(images)
+    def forward(self, images: torch.Tensor,
+                input_ids: torch.Tensor,
+                attention_mask: torch.Tensor,
+                embedded_images: torch.Tensor = None
+        )-> Dict[str, torch.Tensor]:
+        if (embedded_images is None):
+            image_embeddings = self.encode_image(images)
+        else:
+            image_embeddings = embedded_images
         text_embeddings = self.encode_text(input_ids, attention_mask)
         
         # Similarity matrix computation
