@@ -1,5 +1,8 @@
 import torch
 from typing import Tuple
+from pathlib import Path
+import matplotlib.pyplot as plt
+from PIL import Image
 from src.models.tokenizer import WordTokenizer
 from src.models.clip_model import PicBrowseModel
 from src.models.image_encoder import FrozenImageEncoder
@@ -97,3 +100,33 @@ def search_top_k(
         })
 
     return results
+
+
+def show_retrieval_results(
+    results,
+    image_folder: str,
+    query: str,
+    max_results: int = 5,
+):
+    image_folder = Path(image_folder)
+    max_results = min(max_results, len(results))
+
+    plt.figure(figsize=(4 * max_results, 5))
+
+    for i, item in enumerate(results[:max_results], start=1):
+        image_path = image_folder / item["file_name"]
+
+        if not image_path.exists():
+            print(f"Missing image: {image_path}")
+            continue
+
+        image = Image.open(image_path).convert("RGB")
+
+        plt.subplot(1, max_results, i)
+        plt.imshow(image)
+        plt.axis("off")
+        plt.title(f'{item["file_name"]}\nscore={item["score"]:.4f}')
+
+    plt.suptitle(f"Query: {query}", fontsize=14)
+    plt.tight_layout()
+    plt.show()
