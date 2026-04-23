@@ -39,6 +39,37 @@ def train_one_epoch(clip_model: PicBrowseModel,
     average_loss = running_loss / len(dataloader)
     
     return average_loss
+
+
+def train_one_epoch_cached(clip_model: PicBrowseModel,
+                    dataloader: DataLoader,
+                    optimizer: torch.optim,
+    )-> float: 
+    clip_model.train()
+    
+    running_loss = 0.0
+    contrastive_loss = ContrastiveLoss() 
+    
+    for batch in dataloader:
+        image_embeddings = batch["image_embeddings"].to(DEVICE)
+        input_ids = batch["input_ids"].to(DEVICE)
+        attention_mask = batch["attention_mask"].to(DEVICE)
+        
+        outputs = clip_model(images=None, input_ids=input_ids, attention_mask=attention_mask, embedded_images=image_embeddings)
+        logits_per_image = outputs["logits_per_image"]
+        logits_per_text = outputs["logits_per_text"]
+        
+        loss = contrastive_loss(logits_per_image=logits_per_image, logits_per_text=logits_per_text)
+        
+        optimizer.zero_grad(set_to_none=True)
+        loss.backward()
+        optimizer.step()
+        
+        running_loss += loss.item()
+        
+    average_loss = running_loss / len(dataloader)
+    
+    return average_loss
      
 
 def save_best_checkpoint(clip_model: PicBrowseModel,
@@ -67,7 +98,8 @@ def train(clip_model: PicBrowseModel,
             dataloader: DataLoader, 
             optimizer: torch.optim,
             epochs: int,
-            save_path:str
+            save_path:str,
+            using_cached_image_embeddings: bool = False
     )-> List[float]:
     best_loss = 9999999
     loss_history = []
@@ -76,10 +108,15 @@ def train(clip_model: PicBrowseModel,
     
     for epoch in range(epochs):
         
-        average_loss = train_one_epoch(clip_model=clip_model,
-                                       dataloader=dataloader,
-                                       optimizer=optimizer)
-        
+        if using_cached_image_embeddings:
+            average_loss = train_one_epoch_cached(clip_model=clip_model,
+                                        dataloader=dataloader,
+                                        optimizer=optimizer)
+        else:
+            average_loss = train_one_epoch(clip_model=clip_model,
+                                        dataloader=dataloader,
+                                        optimizer=optimizer)
+            
         loss_history.append(average_loss)
         
         best_loss = save_best_checkpoint(clip_model=clip_model,
