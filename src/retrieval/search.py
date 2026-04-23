@@ -20,24 +20,19 @@ def load_trained_model_for_inference(
     checkpoint_path: str,
     vocab_size: int,
     device: torch.device,
-    max_length: int = 32,
-    embed_dim: int = 256,
-    num_heads: int = 4,
-    num_layers: int = 2,
-    ff_dim: int = 512,
-    output_dim: int = 512,
     )-> PicBrowseModel:
     checkpoint = torch.load(checkpoint_path, map_location=device)
 
     image_encoder = FrozenImageEncoder()
+    config = checkpoint["model_config"]
     text_encoder = TextEncoder(
         vocab_size=vocab_size,
-        max_length=max_length,
-        embed_dim=embed_dim,
-        num_heads=num_heads,
-        num_layers=num_layers,
-        ff_dim=ff_dim,
-        output_dim=output_dim,
+        max_length=config["max_length"],
+        embed_dim=config["embed_dim"],
+        num_heads=config["num_heads"],
+        num_layers=config["num_layers"],
+        ff_dim=config["ff_dim"],
+        output_dim=config["output_dim"],
     )
 
     clip_model = PicBrowseModel(
