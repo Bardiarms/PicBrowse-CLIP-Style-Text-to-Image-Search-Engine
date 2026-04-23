@@ -4,6 +4,7 @@ import pandas as pd
 from PIL import Image
 import os
 from torchvision import transforms
+import torch
 
 
 
@@ -31,7 +32,6 @@ class PicBrowseDataset(Dataset):
         caption = str(caption).strip()
         
         
-        
         image_path = self.image_folder / file_name
         if not os.path.isfile(image_path):
             raise FileNotFoundError
@@ -47,3 +47,36 @@ class PicBrowseDataset(Dataset):
         }
         
         return sample
+    
+    
+
+class CachedPicBrowseDataset(Dataset):
+    
+    def __init__(self, csv_file: str,
+                embeddings_file: str, 
+        ):
+        self.csv_file = csv_file
+        self.embeddings_file = Path(embeddings_file)
+        self.table = pd.read_csv(self.csv_file)
+        self.cached_embeddings_dict = torch.load(self.embeddings_file)
+    
+     
+    def __len__(self):
+        return len(self.table)
+        
+        
+    def __getitem__(self, index: int):
+        row = self.table.iloc[index]
+        
+        image_file_name = row["image"]
+        caption = str(row["caption"]).strip()
+        
+        image_embedding = self.cached_embeddings_dict[image_file_name]
+        if image_embedding is None:
+            raise FileNotFoundError(f"No embeddings found for image: {image_file_name}")
+        
+        return {
+            "image_embedding": image_embedding,
+            "caption": caption,
+            "file_name": image_file_name,
+        }
