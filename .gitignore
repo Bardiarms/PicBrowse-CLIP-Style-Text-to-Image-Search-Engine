@@ -5,3 +5,6 @@ src/models/__pycache__
 src/training/__pycache__
 .DS_Store
 notebooks/local_service_test.ipynb
+src/app/__pycache__/
+src/retrieval/__pycache__/
+notebooks/local_service_test

@@ -43,12 +43,14 @@ class PicBrowseRetrievalService:
                                        tokenizer= self.tokenizer,
                                        clip_model=self.clip_model,
                                        device=self.device,
-                                       max_length=self.checkpoint["model_config"]["max_length"]
+                                       max_length=self.clip_model.text_encoder.max_length
                         )
         results = search_top_k(query_embedding=query_embedding,
                                 image_names=self.image_names,
                                 image_embedding_matrix=self.cached_image_embeddings,
                                 top_k=top_k
                 )
+        for item in results:
+            item["image_path"] = str(self.image_folder_path / item["file_name"])
         
         return results
