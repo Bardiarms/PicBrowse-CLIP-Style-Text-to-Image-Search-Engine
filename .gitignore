@@ -4,3 +4,4 @@ scripts
 src/models/__pycache__
 src/training/__pycache__
 .DS_Store
+notebooks/local_service_test.ipynb
