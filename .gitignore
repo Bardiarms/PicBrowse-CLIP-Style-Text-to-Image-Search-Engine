@@ -8,3 +8,4 @@ notebooks/local_service_test.ipynb
 src/app/__pycache__/
 src/retrieval/__pycache__/
 notebooks/local_service_test
+src/__pycache__

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PicBrowse</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f7f7f7;
+            color: #222;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-top: 0;
+            color: #555;
+        }
+
+        form {
+            margin: 20px 0 30px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 12px 18px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #222;
+            color: white;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .result-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .score {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            color: #666;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>PicBrowse</h1>
+    <p>Search images using natural language.</p>
+
+    <form action="/search" method="POST">
+        <input
+            type="text"
+            name="query"
+            placeholder="Enter a query like: a dog running on the road"
+            value="{{ query }}"
+            required
+        >
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %}
+        <h2>Results for "{{ query }}"</h2>
+        <div class="results-grid">
+            {% for item in results %}
+                <div class="result-card">
+                    <img src="/images/{{ item.file_name }}" alt="{{ item.file_name }}">
+                    <div><strong>{{ item.file_name }}</strong></div>
+                    <div class="score">Score: {{ "%.4f"|format(item.score) }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% elif query %}
+        <div class="empty-state">
+            No results found for "{{ query }}".
+        </div>
+    {% endif %}
+</body>
+</html>
