@@ -7,7 +7,7 @@ app = Flask(__name__)
 CHECKPOINT_PATH = "notebooks/local_service_test/artifacts/best_checkpoint.pt"               # Paths are for the local tests
 VOCAB_PATH = "notebooks/local_service_test/artifacts/vocab.pt"
 CACHED_EMBEDDINGS = "notebooks/local_service_test/artifacts/image_embeddings.pt"
-IMAGE_FOLDER_PATH = "notebooks/local_service_test/images"
+IMAGE_FOLDER_PATH = "path/to/local/image/directory"
 
 retrieval_service = PicBrowseRetrievalService(
                     checkpoint_path=CHECKPOINT_PATH,
@@ -30,7 +30,7 @@ def search():
     
     results = retrieval_service.search_query(query=query, top_k=3)
     
-    return render_template("index_html", results=results, query=query)
+    return render_template("index.html", results=results, query=query)
     
     
 @app.route("/images/<filename>")
