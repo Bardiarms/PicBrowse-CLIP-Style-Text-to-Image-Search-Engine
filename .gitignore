@@ -11,3 +11,4 @@ notebooks/local_service_test
 notebooks/data
 src/__pycache__
 runs
+notebooks/
